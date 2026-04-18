@@ -280,7 +280,11 @@ export default function App() {
         body: JSON.stringify({ satelliteName: name })
       });
       const data = await res.json();
-      setAiAnalysis(data.explanation || `ERROR: ${data.error}`);
+      if (!res.ok) {
+        setAiAnalysis(`ERROR (${res.status}): ${data.error || 'AI request failed.'}`);
+        return;
+      }
+      setAiAnalysis(data.explanation || 'No explanation returned.');
     } catch (err) {
       setAiAnalysis('OFFLINE: Backend not responding.');
     }

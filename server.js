@@ -11,7 +11,8 @@ app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json({ limit: '1mb' }));
 
 const PORT = process.env.PORT || 3001;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = (process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '').trim();
+console.log("🔍 THE SERVER SEES THIS KEY:", GEMINI_API_KEY ? GEMINI_API_KEY.substring(0, 5) + "..." : "NOTHING!");
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const N2YO_API_KEY = process.env.N2YO_API_KEY;
 
@@ -19,6 +20,9 @@ const N2YO_API_KEY = process.env.N2YO_API_KEY;
 const EXTERNAL_API_TIMEOUT_MS = 10000; 
 
 const genAI = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
+if (!GEMINI_API_KEY) {
+  console.error('GEMINI_API_KEY is empty or missing.');
+}
 
 let tleCache = { updatedAt: 0, source: 'none', items: [] };
 let issCache = { updatedAt: 0, data: null };
@@ -143,6 +147,7 @@ app.get('/api/satellites', async (req, res) => {
 
 app.post('/api/ai/explain', async (req, res) => {
   const { satelliteName } = req.body;
+  if (!satelliteName) return res.status(400).json({ error: 'satelliteName is required' });
   if (!genAI) return res.status(500).json({ error: 'Missing GEMINI_API_KEY' });
   
   try {
@@ -152,8 +157,15 @@ app.post('/api/ai/explain', async (req, res) => {
     const response = await result.response;
     res.json({ explanation: response.text() });
   } catch (error) {
-    console.error('GEMINI ERROR:', error.message);
-    res.status(500).json({ error: error.message });
+    const message = error?.message || 'Gemini request failed';
+    console.error('GEMINI ERROR:', message);
+    if (message.includes('[503') || message.includes('high demand')) {
+      return res.status(503).json({ error: 'Gemini is busy right now. Please tap again in a moment.' });
+    }
+    if (message.includes('[429')) {
+      return res.status(429).json({ error: 'Gemini rate limit reached. Please wait a bit and try again.' });
+    }
+    res.status(500).json({ error: `Gemini error: ${message}` });
   }
 });
 
