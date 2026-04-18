@@ -1,0 +1,31 @@
+/* index.css */
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #020611; /* Deep space dark blue */
+  background-image: radial-gradient(circle at 50% 100%, #0a1930 0%, #020611 100%);
+  color: #00ffff;
+  font-family: 'Courier New', Courier, monospace; /* Sci-fi monospace */
+}
+
+#root { width: 100vw; height: 100vh; position: relative; }
+
+/* The Glassmorphism UI Panels */
+.sci-fi-panel {
+  position: absolute;
+  background: rgba(10, 25, 47, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 10;
+}
+
+.header { top: 20px; left: 50%; transform: translateX(-50%); width: 80%; text-align: center; }
+.left-panel { top: 100px; left: 20px; width: 300px; }
+.right-panel { top: 100px; right: 20px; width: 350px; }
+.footer { bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; opacity: 0.7;}
+
+h1, h2, h3 { margin-top: 0; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
+.magenta-text { color: #ff00ff; text-shadow: 0 0 10px rgba(255, 0, 255, 0.8); }
