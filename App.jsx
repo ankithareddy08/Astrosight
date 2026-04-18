@@ -59,7 +59,7 @@ export default function App() {
   useEffect(() => {
     const fetchTelemetry = async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/iss');
+        const res = await fetch('https://astrosight-api-xyz.onrender.com/api/iss')
         const data = await res.json();
         setIssData(data);
       } catch (err) { console.error("Telemetry error:", err); }
