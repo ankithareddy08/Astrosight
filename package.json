@@ -20,5 +20,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "satellite.js": "^6.0.2"
+  },
+  "devDependencies": {
+    "vite": "^8.0.8"
   }
 }
