@@ -5,9 +5,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "npm run dev --prefix astrosight-ui",
+    "build": "npm install --prefix astrosight-ui && npm run build --prefix astrosight-ui",
+    "preview": "npm run preview --prefix astrosight-ui"
   },
   "keywords": [],
   "author": "",

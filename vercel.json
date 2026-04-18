@@ -1,0 +1,5 @@
+{
+  "installCommand": "npm install && npm install --prefix astrosight-ui",
+  "buildCommand": "npm run build",
+  "outputDirectory": "astrosight-ui/dist"
+}
